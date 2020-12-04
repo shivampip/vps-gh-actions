@@ -2,22 +2,23 @@ name: Django Only Run
 
 on:
   workflow_dispatch: 
-      vps_path:
-        description: 'Path on VPS'
-        required: true
-        default: './'
-      venv_name:
-        description: 'Venv Name'
-        required: true
-        default: venv
-      run_port:
-        description: 'Run on port'
-        required: true
-        default: 8000
-      django_pro_path:
-        description: 'Django Project Path'
-        required: true
-        default: './'
+    inputs:
+        vps_path:
+          description: 'Path on VPS'
+          required: true
+          default: './'
+        venv_name:
+          description: 'Venv Name'
+          required: true
+          default: venv
+        run_port:
+          description: 'Run on port'
+          required: true
+          default: 8000
+        django_pro_path:
+          description: 'Django Project Path'
+          required: true
+          default: './'
 
         
         
