@@ -1,0 +1,43 @@
+name: Django Migrate, Run
+
+on:
+  workflow_dispatch: 
+      vps_path:
+        description: 'Path on VPS'
+        required: true
+        default: './'
+      venv_name:
+        description: 'Venv Name'
+        required: true
+        default: venv
+      run_port:
+        description: 'Run on port'
+        required: true
+        default: 8000
+      django_pro_path:
+        description: 'Django Project Path'
+        required: true
+        default: './'
+
+        
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect VPS & Clone
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ${{ github.event.inputs.vps_path }}
+            cd ${{ github.event.repository.name }}
+            source ${{ github.event.inputs.venv_name }}/bin/activate
+            python manage.py makemigrations
+            python manage.py migrate
+            fuser -n tcp -k ${{ github.event.inputs.run_port }}
+            gunicorn helloapp.wsgi --bind 0.0.0.0:${{ github.event.inputs.run_port }} --daemon
+            ps ax|grep gunicorn
