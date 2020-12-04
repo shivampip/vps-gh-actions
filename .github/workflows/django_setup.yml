@@ -1,20 +1,23 @@
-name: Django Install
+name: Django Install, Migrate, Run
 
 on:
   workflow_dispatch: 
-    inputs:
-      gh_username:
-        description: 'Github Username'
-        required: true
-        default: 'shivampip'
-      reponame:
-        description: 'Repo Name'
-        required: true
-        default: '${{ github.repository.name }}'
       vps_path:
         description: 'Path on VPS'
         required: true
-        default: '.'
+        default: './'
+      venv_name:
+        description: 'Venv Name'
+        required: true
+        default: venv
+      run_port:
+        description: 'Run on port'
+        required: true
+        default: 8000
+      django_pro_path:
+        description: 'Django Project Path'
+        required: true
+        default: './'
 
         
         
@@ -33,6 +36,16 @@ jobs:
             mkdir -p ${{ github.event.inputs.vps_path }}
             cd ${{ github.event.inputs.vps_path }}
             pwd
-            git clone https://www.github.com/${{ github.event.inputs.gh_username }}/${{ github.event.inputs.reponame }}
-            cd ${{ github.event.inputs.reponame }}
+            git clone ${{ github.repositoryUrl }}
+            cd ${{ github.event.repository.name }}
             pwd
+            python -m venv ${{ github.event.inputs.venv_name }}
+            source ${{ github.event.inputs.venv_name }}/bin/activate
+            pip install -r requirements.txt
+            pip install gunicorn
+            python manage.py makemigrations
+            python manage.py migrate
+            fuser -n tcp -k ${{ github.event.inputs.run_port }}
+            gunicorn helloapp.wsgi --bind 0.0.0.0:${{ github.event.inputs.run_port }} --daemon
+            ps ax|grep gunicorn
+            
