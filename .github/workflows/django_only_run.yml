@@ -36,6 +36,7 @@ jobs:
           script: |
             cd ${{ github.event.inputs.vps_path }}
             cd ${{ github.event.repository.name }}
+            git pull
             source ${{ github.event.inputs.venv_name }}/bin/activate
             fuser -n tcp -k ${{ github.event.inputs.run_port }}
             gunicorn helloapp.wsgi --bind 0.0.0.0:${{ github.event.inputs.run_port }} --daemon
