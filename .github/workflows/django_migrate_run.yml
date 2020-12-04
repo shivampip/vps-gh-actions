@@ -37,6 +37,7 @@ jobs:
           script: |
             cd ${{ github.event.inputs.vps_path }}
             cd ${{ github.event.repository.name }}
+            git pull
             source ${{ github.event.inputs.venv_name }}/bin/activate
             python manage.py makemigrations
             python manage.py migrate
