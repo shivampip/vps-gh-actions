@@ -3,14 +3,6 @@ name: Clone Repo
 on:
   workflow_dispatch:
     inputs:
-      gh_username:
-        description: 'Github Username'
-        required: true
-        default: 'shivampip'
-      reponame:
-        description: 'Repo Name'
-        required: true
-        default: ''
       vps_path:
         description: 'Path on VPS'
         required: true
@@ -33,7 +25,7 @@ jobs:
             mkdir -p ${{ github.event.inputs.vps_path }}
             cd ${{ github.event.inputs.vps_path }}
             pwd
-            git clone https://www.github.com/${{ github.event.inputs.gh_username }}/${{ github.event.inputs.reponame }}
-            cd ${{ github.event.inputs.reponame }}
+            git clone ${{ github.repositoryUrl }}
+            cd ${{ github.event.repository.name }}
             pwd
           
