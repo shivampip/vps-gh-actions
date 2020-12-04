@@ -1,0 +1,35 @@
+name: Clone Repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      gh_username:
+        description: 'Github Username'
+        required: true
+        default: 'shivampip'
+      reponame:
+        description: 'Repo Name'
+        required: true
+        default: ''
+      vps_path:
+        description: 'Path on VPS'
+        required: true
+        default: '.'
+        
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect VPS & Clone
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            mkdir -p ${{ github.event.inputs.vps_path }}
+            cd ${{ github.event.inputs.vps_path }}
+            git clone https://www.github.com/${{ github.event.inputs.gh_username }}/${{ github.event.inputs.reponame }}
+          
