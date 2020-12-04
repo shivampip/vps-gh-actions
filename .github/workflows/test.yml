@@ -1,0 +1,15 @@
+name: Check Github Context
+
+on:
+  workflow_dispatch:
+
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump github context
+        run:   echo "$GITHUB_CONTEXT"
+        shell: bash
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
