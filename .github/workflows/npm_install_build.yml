@@ -28,6 +28,7 @@ jobs:
           script: |
             cd ${{ github.event.inputs.vps_path }}
             cd ${{ github.event.repository.name }}
+            git pull
             cd ${{ github.event.inputs.react_pro_path }}
             npm install
             npm run build
