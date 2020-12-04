@@ -1,0 +1,33 @@
+name: NPM Install, Build
+
+on:
+  workflow_dispatch: 
+    inputs:
+        vps_path:
+          description: 'Repo Parent Path on VPS'
+          required: true
+          default: './'
+        react_pro_path:
+          description: 'React Project Path in Repo'
+          required: true
+          default: './'
+
+        
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect VPS & Clone
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ${{ github.event.inputs.vps_path }}
+            cd ${{ github.event.repository.name }}
+            cd ${{ github.event.inputs.react_pro_path }}
+            npm install
+            npm run build
