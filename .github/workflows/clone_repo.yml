@@ -15,10 +15,7 @@ on:
         description: 'Path on VPS'
         required: true
         default: '.'
-      private_repo:
-        description: 'Is Private'
-        required: true
-        default: true
+
         
         
 jobs:
